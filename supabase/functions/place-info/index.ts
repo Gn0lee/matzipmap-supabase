@@ -50,9 +50,8 @@ const getPlaceInfo = async (
       score_count
     `,
     )
-    .eq("id", id).select();
-
-  console.log(cacheData);
+    .eq("id", id)
+    .select();
 
   if (error) {
     return new Response(JSON.stringify({ message: error.message }), {
