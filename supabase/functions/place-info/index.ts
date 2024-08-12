@@ -61,10 +61,15 @@ const getPlaceInfo = async (
   }
 
   if (isCacheDataValid(cacheData[0])) {
-    return new Response(JSON.stringify({ data: cacheData[0] }), {
-      headers: { "Content-Type": "application/json" },
-      status: 200,
-    });
+    return new Response(
+      JSON.stringify({
+        data: { ...cacheData[0], id: cacheData[0].id.toString() },
+      }),
+      {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      },
+    );
   }
 
   const { data } = await axiod.get(
@@ -92,10 +97,15 @@ const getPlaceInfo = async (
     });
   }
 
-  return new Response(JSON.stringify({ data: upsertData[0] }), {
-    headers: { "Content-Type": "application/json" },
-    status: 200,
-  });
+  return new Response(
+    JSON.stringify({
+      data: { ...upsertData[0], id: upsertData[0].id.toString() },
+    }),
+    {
+      headers: { "Content-Type": "application/json" },
+      status: 200,
+    },
+  );
 };
 
 Deno.serve((req) => {
@@ -136,7 +146,7 @@ Deno.serve((req) => {
     const matchingPath = placeInfoPattern.exec(url.href);
     const id = matchingPath?.pathname.groups.id;
 
-    if (method === "GET") {
+    if (method === "GET" && !!id) {
       return getPlaceInfo(supabaseClient, id);
     }
 
