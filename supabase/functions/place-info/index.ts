@@ -66,7 +66,7 @@ const getPlaceInfo = async (
         data: { ...cacheData[0], id: cacheData[0].id.toString() },
       }),
       {
-        headers: { "Content-Type": "application/json" },
+        headers: contentTypeHeaders,
         status: 200,
       },
     );
@@ -102,7 +102,7 @@ const getPlaceInfo = async (
       data: { ...upsertData[0], id: upsertData[0].id.toString() },
     }),
     {
-      headers: { "Content-Type": "application/json" },
+      headers: contentTypeHeaders,
       status: 200,
     },
   );
