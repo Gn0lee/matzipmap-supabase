@@ -83,7 +83,7 @@ const postUserInfo = async (
   }
 
   const { data: storedUser, error: storeError } = await supabase
-    .from("user")
+    .from("users")
     .upsert({
       id: user.id,
       email: user.email,
@@ -93,7 +93,7 @@ const postUserInfo = async (
       name: user.user_metadata.name,
     })
     .select()
-    .single()
+    .single();
 
   if (storeError) {
     console.error(storeError);
