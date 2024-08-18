@@ -2,7 +2,6 @@ import {
   createClient,
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js";
-import axiod from "https://deno.land/x/axiod/mod.ts";
 
 import { corsHeaders } from "../_shared/cors.ts";
 
@@ -45,8 +44,6 @@ const postUserInfo = async (
 
   const response = await tokenResponse.json();
 
-  console.log(response);
-
   const { data: { user, session }, error } = await supabase.auth
     .signInWithIdToken({
       provider: "kakao",
@@ -85,18 +82,18 @@ const postUserInfo = async (
     );
   }
 
-  console.log(user);
-  console.log(session);
-
   const { data: storedUser, error: storeError } = await supabase
     .from("user")
     .upsert({
       id: user.id,
       email: user.email,
       provider_id: user.user_metadata.provider_id,
-      last_log_in: new Date().toISOString(),
+      last_sign_in_at: user.last_sign_in_at,
+      profile_url: user.user_metadata.picture,
+      name: user.user_metadata.name,
     })
-    .select();
+    .select()
+    .single()
 
   if (storeError) {
     console.error(storeError);
@@ -105,7 +102,7 @@ const postUserInfo = async (
   return new Response(
     JSON.stringify({
       message: "Login successful",
-      user: storedUser || user,
+      user: storedUser,
     }),
     {
       status: 200,
