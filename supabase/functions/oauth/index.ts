@@ -102,7 +102,11 @@ const postUserInfo = async (
   return new Response(
     JSON.stringify({
       message: "Login successful",
-      user: storedUser,
+      data: {
+        user: storedUser,
+        access_token: session.access_token,
+        refresh_token: session.refresh_token
+      }
     }),
     {
       status: 200,
